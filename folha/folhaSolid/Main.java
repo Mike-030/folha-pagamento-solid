@@ -1,30 +1,33 @@
-package folhaSolid;
-
 import java.util.Arrays;
 import java.util.List;
+
+import domain.Entities;
+import domain.Regras;
+import usecase.GerarFolhaUseCase;
+import adapter.Presenters;
 
 public class Main {
     public static void main(String[] args) {
 
-        List<RegraDeCalculo> regras = Arrays.asList(
-                new RegraHoraExtra(),
-                new RegraBonus(500),
-                new RegraINSS(),
-                new RegraValeTransporte(),
-                new RegraPlanoDeSaude(150),
-                new RegraAdicionalNoturno());
+        List<Regras.RegraDeCalculo> regras = Arrays.asList(
+                new Regras.RegraHoraExtra(),
+                new Regras.RegraBonus(500),
+                new Regras.RegraINSS(),
+                new Regras.RegraValeTransporte(),
+                new Regras.RegraPlanoDeSaude(150),
+                new Regras.RegraAdicionalNoturno());
 
-        CalculadoraDeFolha calculadora = new CalculadoraDeFolha(regras);
+        GerarFolhaUseCase gerarFolhaUseCase = new GerarFolhaUseCase(regras);
 
-        Funcionario clt = new FuncionarioCLT("João Silva (CLT)", 3000, 10, true);
-        Funcionario pj = new FuncionarioPJ("Empresa do Marcos (PJ)", 8000);
+        Entities.Funcionario clt = new Entities.FuncionarioCLT("João Silva (CLT)", 3000, 10, true);
+        Entities.Funcionario pj = new Entities.FuncionarioPJ("Empresa do Marcos (PJ)", 8000);
 
-        Holerite holeriteCLT = calculadora.gerarFolha(clt);
-        Holerite holeritePJ = calculadora.gerarFolha(pj);
+        Entities.Holerite holeriteCLT = gerarFolhaUseCase.executar(clt);
+        Entities.Holerite holeritePJ = gerarFolhaUseCase.executar(pj);
 
-        ImpressoraDeHolerite impressora = new ImpressoraDeHolerite();
+        Presenters.HoleritePresenter presenter = new Presenters.ConsoleHoleritePresenter();
 
-        impressora.imprimir(holeriteCLT);
-        impressora.imprimir(holeritePJ);
+        presenter.apresentar(holeriteCLT);
+        presenter.apresentar(holeritePJ);
     }
 }
