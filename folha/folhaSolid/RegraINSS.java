@@ -9,7 +9,13 @@ public class RegraINSS implements RegraDeCalculo {
 
     @Override
     public double calcular(Funcionario funcionario) {
-        return funcionario.getSalarioBase() * 0.11;
+        if (funcionario instanceof ElegivelINSS) {
+            ElegivelINSS elegivel = (ElegivelINSS) funcionario;
+            if (elegivel.pagaINSS()) {
+                return funcionario.getSalarioBase() * 0.11;
+            }
+        }
+        return 0;
     }
 
     @Override
